@@ -1,6 +1,7 @@
 package projects;
 
 import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -21,9 +22,13 @@ private Scanner scanner = new Scanner(System.in);
 	
 	// @formatter:off
 	
-//References to interface static methods are allowed only at source level 1.8 or above
+ //making a current project variable that can become what holds a current project using option 3
+private Project curProject;
+
 	private List<String> operations = List.of(
-			"1) Add a project"
+			"1) Add a project",
+			"2) List projects",
+			"3) Select a project"
 			);
 			
 			// @formatter:on
@@ -34,9 +39,6 @@ private Scanner scanner = new Scanner(System.in);
 		  
 	}
 
-	
-	
-	
 	
 	//this method has all the menu options
 			private void processUserSelections() {
@@ -60,10 +62,20 @@ private Scanner scanner = new Scanner(System.in);
 							createProject();
 							break;
 							
+						case 2:
+							listProjects();
+							break;
+							
+						case 3: 
+							selectProject();
+							break;
+							
+							
 							default:
 								System.out.println("\n" + selection + " is not a valid selection. Try again.");
 								break;
 								
+							
 						}
 					}
 					
@@ -80,6 +92,25 @@ private Scanner scanner = new Scanner(System.in);
 			
 			
 			
+			private void selectProject() {
+				 listProjects();
+				 Integer projectId = getIntInput("Enter a project ID to select a project");
+				 curProject = null;
+				 curProject = projectService.fetchProjectById(projectId);
+				
+			}
+
+
+			private void listProjects() {
+		 List<Project> projects = projectService.fetchAllProjects();
+				 
+				 System.out.println("\nProjects:");
+		 
+projects.forEach(project -> System.out.println("   " + project.getProjectId() + ":  " + project.getProjectName()));
+		
+	}
+
+
 			private void createProject() {
 				
 				//setting what each object will be and prompt the user for
@@ -193,15 +224,17 @@ return Objects.isNull(input) ? -1 : input;
 				 System.out.println("\nThese are the available selections. Press the Enter key to quit:");
 
 				 
-	 //either fix to use this or just use the advanced loop
-//Lambda expressions are allowed only at source level 1.8 or above 
-	//	operations.forEach(line -> System.out.println("  " + line));
 				 
-				 
-				 for (String line : operations) {
-					 System.out.println("  " + line);
+				for (String line : operations) {
+					System.out.println("  " + line);
 				 }
 				 
+				if(Objects.isNull(curProject)) {
+					System.out.println("\nYou are not working with a project.");
+				}
+				else {
+					System.out.println("\nYou are working with project: " + curProject);
+				}
 			}
 
 }

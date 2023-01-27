@@ -34,7 +34,7 @@ FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE
 
 
 CREATE TABLE step (
-step_id INT AUTO_INCREMENT  NOT NULL,
+step_id INT AUTO_INCREMENT NOT NULL,
 project_id INT NOT NULL,
 step_text TEXT NOT NULL,
 step_order INT NOT NULL,
@@ -45,7 +45,7 @@ FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE
 
 
 CREATE TABLE category(
-category_id INT NOT NULL,
+category_id INT AUTO_INCREMENT NOT NULL,
 category_name VARCHAR(128) NOT NULL,
 PRIMARY KEY (category_id) 
 
