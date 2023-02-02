@@ -103,12 +103,20 @@ private Project curProject;
 			
 			
 			private void deleteProject() {
+				
+				//list the projects to see what we can delete 
 		 listProjects();
+		 
+		 //prompt the user and get the project ID we wish to delete
 		 Integer projectId = getIntInput("Enter the ID of the project to delete");
 		 
+		 
+		 //call the method to delete, passing in the ID the user gave us,  and let the user know it was deleted 
 		 projectService.deleteProject(projectId);
 		 System.out.println("Project " + projectId + " has been deleted successfully.");
 		 
+		 
+		 //if we were working with a project or not we won't be after we delete a project; this clears the current project so the user will have to select to work with a current project again
 		 if(Objects.nonNull(curProject) && curProject.getProjectId().equals(projectId)) {
 			 curProject = null;
 			 
@@ -118,6 +126,8 @@ private Project curProject;
 
 
 			private void updateProjectDetails() {
+				
+				// make sure the object current project has a project selected, otherwise tell the user to select a project and come back
 				 if(Objects.isNull(curProject)) {
 					 System.out.println("\nPlease select a project.");
 					 return;
@@ -138,9 +148,10 @@ private Project curProject;
 				project.setDifficulty(Objects.isNull(difficulty) ? curProject.getDifficulty() : difficulty);
 				project.setNotes(Objects.isNull(notes) ? curProject.getNotes() : notes);
 				
-				
+				//call the modify project method and pass in the project
 				projectService.modifyProjectDetails(project);
 				
+				//project service handles things like adding, deleting and now updating too
 				curProject = projectService.fetchProjectById(curProject.getProjectId());
 				
 			}

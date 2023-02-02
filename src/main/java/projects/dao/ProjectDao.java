@@ -214,6 +214,8 @@ private List<Step> fetchStepsForProject(Connection conn, Integer projectId) thro
 		}
 	}
 }
+//here we have our SQL statement when we want to update a project
+// it goes in the same order that the user inputs all this info too
 
 public boolean modifyProjectDetails(Project project) {
 	 // @formatter:off
@@ -227,9 +229,12 @@ public boolean modifyProjectDetails(Project project) {
 			+ "WHERE project_id = ?";
 	// @formatter:on
 	
+	//try with resource
 	try(Connection conn = DbConnection.getConnection()) {
 		startTransaction(conn);
 		
+		
+		//here the project is actually updating using the above statements the user helped fill out
 		try(PreparedStatement stmt = conn.prepareStatement(sql)) {
 			setParameter(stmt, 1, project.getProjectName(), String.class);
 			setParameter(stmt, 2, project.getEstimatedHours(), BigDecimal.class);
@@ -255,10 +260,16 @@ public boolean modifyProjectDetails(Project project) {
 	}
 
 public boolean deleteProject(Integer projectId) {
+	
+	// this is the statement that will ask SQL to delete the project, it will be used below as the prepared statement
+	
 	 String sql = "DELETE FROM " + PROJECT_TABLE + " WHERE project_id = ?";
 	 
 	 try(Connection conn = DbConnection.getConnection()) {
 		 startTransaction(conn);
+		 
+		 //while updating had a lot of prepared statements to delete we will only need the one. 
+		 // also we set up 'on delete cascade' in the schema file, so any child rows will go too
 		 
 		 try(PreparedStatement stmt = conn.prepareStatement(sql)) {
 			 setParameter(stmt, 1, projectId, Integer.class);
